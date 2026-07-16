@@ -5,13 +5,19 @@
    ペアごとに**別の場所**を直すので、並行作業でも衝突しない。
    import も自分の場所の近くに書くこと（ファイル先頭にまとめない＝衝突回避）。
 """
-
+from .rules import ask_allow_duplicates
 from .core import judge, make_secret
 
 
 def play(digits=3):
-    secret = make_secret(digits)
-    print(f"Hit & Blow（{digits} 桁・重複なし）")
+    allow_duplicates = ask_allow_duplicates()
+    secret = make_secret(
+        digits=digits,
+        allow_duplicates=allow_duplicates,
+    )
+
+    duplicate_text = "あり" if allow_duplicates else "なし"
+    print(f"Hit & Blow（{digits} 桁・重複{duplicate_text}）")
 
     # ===== ① 開始時に足す（難易度・あいさつ など）: ここに書く =====
     from .keta import ask_digits
