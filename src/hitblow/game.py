@@ -11,8 +11,13 @@ from .core import judge, make_secret
 
 def play(digits=3):
     allow_duplicates = ask_allow_duplicates()
-    secret = make_secret(digits)
-    print(f"Hit & Blow（{digits} 桁・重複なし）")
+    secret = make_secret(
+        digits=digits,
+        allow_duplicates=allow_duplicates,
+    )
+
+    duplicate_text = "あり" if allow_duplicates else "なし"
+    print(f"Hit & Blow（{digits} 桁・重複{duplicate_text}）")
 
     # ===== ① 開始時に足す（難易度・あいさつ など）: ここに書く =====
 
