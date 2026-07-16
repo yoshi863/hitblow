@@ -5,11 +5,12 @@
    ペアごとに**別の場所**を直すので、並行作業でも衝突しない。
    import も自分の場所の近くに書くこと（ファイル先頭にまとめない＝衝突回避）。
 """
-
+from .rules import ask_allow_duplicates
 from .core import judge, make_secret
 
 
 def play(digits=3):
+    allow_duplicates = ask_allow_duplicates()
     secret = make_secret(digits)
     print(f"Hit & Blow（{digits} 桁・重複なし）")
 
