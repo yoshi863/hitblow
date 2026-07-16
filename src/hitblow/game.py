@@ -14,7 +14,16 @@ def play(digits=3):
     print(f"Hit & Blow（{digits} 桁・重複なし）")
 
     # ===== ① 開始時に足す（難易度・あいさつ など）: ここに書く =====
+    from .keta import ask_digits
 
+    # keta.pyを使ってプレイヤーに桁数を聞く
+    new_digits = ask_digits(digits)
+    
+    # もし桁数が変更されたら、答え（secret）を作り直す
+    if new_digits != digits:
+        digits = new_digits
+        secret = make_secret(digits)
+        print(f"👉 {digits} 桁でゲームをスタートします！")
     tries = 0
     while True:
         guess = input("予想 > ").strip()
