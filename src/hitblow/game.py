@@ -69,7 +69,7 @@ def play(digits=3):
 
         # 重複なしルールの場合、同じ数字がないか確認
         if not allow_duplicates and len(set(guess)) != digits:
-            print("重複なしルールです。同じ数字は使わないでね")
+            print("重複なしルールだよ。同じ数字は使わないでね")
         
         tries += 1
 
@@ -81,6 +81,13 @@ def play(digits=3):
             # ===== ③ 勝利時に足す（スコア・履歴など） =====
 
             print(f"正解！ {tries}回で当たり（答え {secret}）")
+
+            input(
+                "スライム「うわー！やられたー！"
+                "君なら……魔王様を……」【Enter】"
+            )
+
+            print("こうして、なんやかんや無事、魔王様を倒しましたとさ。")
             break
 
         # 正解でなかった場合だけ、間違えた回数を増やす
