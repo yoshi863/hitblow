@@ -28,7 +28,6 @@ def judge(secret: str, guess: str) -> tuple[int, int]:
     return hit, blow
 
 
-
 def make_secret(
     digits: int = 3,
     allow_duplicates: bool = False,
