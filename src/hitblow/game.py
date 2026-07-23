@@ -47,17 +47,20 @@ def play(digits=3):
     print(f"Hit & Blow（{digits}桁・重複{duplicate_text}）")
     print(f"👉 {digits} 桁でゲームをスタートします！")
 
+    # 正式な予想を入力した回数
     tries = 0
+
+    # 間違えた回数
+    wrong_tries = 0
+
+    # 次にヒントとして表示する桁の位置
+    # 0は1桁目、1は2桁目を表す
+    hint_position = 0
 
     while True:
         guess = input("予想 > ").strip()
 
         # ===== ② 入力コマンドに足す（ヒントなど） =====
-        # 例：
-        # from .hint import hint
-        # if guess == "h":
-        #     print(hint(secret))
-        #     continue
 
         # 数字と桁数を確認
         if len(guess) != digits or not guess.isdigit():
@@ -67,7 +70,7 @@ def play(digits=3):
         # 重複なしルールの場合、同じ数字がないか確認
         if not allow_duplicates and len(set(guess)) != digits:
             print("重複なしルールです。同じ数字は使わないでね")
-        
+            continue
 
         tries += 1
 
@@ -80,3 +83,16 @@ def play(digits=3):
 
             print(f"正解！ {tries}回で当たり（答え {secret}）")
             break
+
+        # 正解でなかった場合だけ、間違えた回数を増やす
+        wrong_tries += 1
+
+        # 10回、20回、30回……間違えるごとにヒントを提案する
+        if wrong_tries % 10 == 0:
+            from .hint import offer_hint
+
+            hint_position = offer_hint(
+                secret,
+                wrong_tries,
+                hint_position,
+            )
