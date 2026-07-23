@@ -70,8 +70,7 @@ def play(digits=3):
         # 重複なしルールの場合、同じ数字がないか確認
         if not allow_duplicates and len(set(guess)) != digits:
             print("重複なしルールです。同じ数字は使わないでね")
-            continue
-
+        
         tries += 1
 
         hit, blow = judge(secret, guess)
