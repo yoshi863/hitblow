@@ -7,45 +7,44 @@ import random
 from collections import Counter
 
 
-def make_secret(digits=3, allow_duplicates=False):
-    """指定された桁数で答えを作る。"""
+def judge(secret: str, guess: str) -> tuple[int, int]:
+    """Hit数とBlow数を返す。重複する数字にも対応する。"""
 
-    numbers = "0123456789"
-
-    if allow_duplicates:
-        # 重複あり
-        return "".join(
-            random.choices(numbers, k=digits)
-        )
-
-    # 重複なし
-    if digits > 10:
-        raise ValueError("重複なしの場合は10桁以下にしてください。")
-
-    return "".join(
-        random.sample(numbers, k=digits)
-    )
-
-
-def judge(secret, guess):
-    """Hit数とBlow数を求める。重複ありにも対応する。"""
-
-    # 位置と数字の両方が同じ
     hit = sum(
         secret_digit == guess_digit
         for secret_digit, guess_digit in zip(secret, guess)
     )
 
-    # 答えと予想に共通して含まれる数字の個数
     secret_counts = Counter(secret)
     guess_counts = Counter(guess)
 
-    common_count = sum(
-        min(secret_counts[digit], guess_counts[digit])
-        for digit in secret_counts
+    total_matches = sum(
+        min(secret_counts[number], guess_counts[number])
+        for number in secret_counts
     )
 
-    # 共通する数字からHitを除いたものがBlow
-    blow = common_count - hit
+    blow = total_matches - hit
 
     return hit, blow
+
+
+def make_secret(
+    digits: int = 3,
+    allow_duplicates: bool = False,
+) -> str:
+    """指定された桁数と重複設定で秘密の数字を作る。"""
+
+    if digits < 1:
+        raise ValueError("桁数は1以上にしてください")
+
+    if not allow_duplicates and digits > 10:
+        raise ValueError("重複なしの場合、桁数は10以下にしてください")
+
+    numbers = "0123456789"
+
+    if allow_duplicates:
+        # 同じ数字が複数回選ばれる可能性がある
+        return "".join(random.choices(numbers, k=digits))
+
+    # 同じ数字を使わずに選ぶ
+    return "".join(random.sample(numbers, k=digits))

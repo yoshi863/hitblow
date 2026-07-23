@@ -5,7 +5,7 @@
    ペアごとに**別の場所**を直すので、並行作業でも衝突しない。
    import も自分の場所の近くに書くこと（ファイル先頭にまとめない＝衝突回避）。
 """
-
+# 使わなくなった古い ask_allow_duplicates の import は削除しました
 from .core import judge, make_secret
 from .keta import ask_digits
 
@@ -37,7 +37,7 @@ def play(digits=3):
 
     # 選択されたルールで答えを作る
     secret = make_secret(
-        digits,
+        digits=digits,
         allow_duplicates=allow_duplicates,
     )
 
@@ -70,7 +70,8 @@ def play(digits=3):
         # 重複なしルールの場合、同じ数字がないか確認
         if not allow_duplicates and len(set(guess)) != digits:
             print("重複なしルールだよ。同じ数字は使わないでね")
-        
+            continue  # ※処理が下に進まないよう continue を追加補足しました
+
         tries += 1
 
         hit, blow = judge(secret, guess)
