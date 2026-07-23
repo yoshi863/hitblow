@@ -8,7 +8,7 @@ def ask_digits(current_digits):
     print("勇者（プレイヤー）「さあ、世界の平和を守るため、魔王城へ出発だ!」")
     print("勇者が魔王城へ向かっていると、なにかにぶつかってしまった。")
     print("スライム「僕は悪いスライムじゃないよ!」")
-    print("スライム「さあ、僕とhit&blowで遊ぼう!」")
+    print("スライム「さあ、僕とhit&blowで遊ぼう!」\n")
     while True:
         ans = input(f"何桁でプレイしますか？（現在の設定: {current_digits}桁）\n変更しない場合はそのままEnter ＞ ").strip()
         
