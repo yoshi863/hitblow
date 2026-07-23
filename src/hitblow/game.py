@@ -45,7 +45,7 @@ def play(digits=3):
 
     print()
     print(f"Hit & Blow（{digits}桁・重複{duplicate_text}）")
-    print("ゲームをスタートします！")
+    print(f"👉 {digits} 桁でゲームをスタートします！")
 
     tries = 0
 
