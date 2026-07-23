@@ -4,19 +4,48 @@
 """
 
 import random
+from collections import Counter
+
+
+def make_secret(digits=3, allow_duplicates=False):
+    """指定された桁数で答えを作る。"""
+
+    numbers = "0123456789"
+
+    if allow_duplicates:
+        # 重複あり
+        return "".join(
+            random.choices(numbers, k=digits)
+        )
+
+    # 重複なし
+    if digits > 10:
+        raise ValueError("重複なしの場合は10桁以下にしてください。")
+
+    return "".join(
+        random.sample(numbers, k=digits)
+    )
 
 
 def judge(secret, guess):
-    """secret と guess（同じ桁数の文字列）を比べて (hit, blow) を返す。
+    """Hit数とBlow数を求める。重複ありにも対応する。"""
 
-    hit  … 数字も位置も合っている個数
-    blow … 数字は含まれるが位置が違う個数
-    """
-    hits = sum(s == g for s, g in zip(secret, guess))
-    common = sum(min(secret.count(d), guess.count(d)) for d in set(guess))
-    return hits, common - hits
+    # 位置と数字の両方が同じ
+    hit = sum(
+        secret_digit == guess_digit
+        for secret_digit, guess_digit in zip(secret, guess)
+    )
 
+    # 答えと予想に共通して含まれる数字の個数
+    secret_counts = Counter(secret)
+    guess_counts = Counter(guess)
 
-def make_secret(digits=3):
-    """重複なしの digits 桁の答えを作る。"""
-    return "".join(random.sample("0123456789", digits))
+    common_count = sum(
+        min(secret_counts[digit], guess_counts[digit])
+        for digit in secret_counts
+    )
+
+    # 共通する数字からHitを除いたものがBlow
+    blow = common_count - hit
+
+    return hit, blow

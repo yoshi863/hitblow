@@ -7,41 +7,76 @@
 """
 
 from .core import judge, make_secret
+from .keta import ask_digits
+
+
+def ask_duplicates():
+    """数字の重複を許可するかプレイヤーに聞く。"""
+    while True:
+        answer = input(
+            "数字の重複を選んでください（1：重複なし / 2：重複あり）> "
+        ).strip()
+
+        if answer == "1":
+            return False
+
+        if answer == "2":
+            return True
+
+        print("1 または 2 を入力してください。")
 
 
 def play(digits=3):
-    secret = make_secret(digits)
-    print(f"Hit & Blow（{digits} 桁・重複なし）")
+    # ===== ① ゲーム開始時の設定 =====
 
-    # ===== ① 開始時に足す（難易度・あいさつ など）: ここに書く =====
-    from .keta import ask_digits
+    # プレイヤーに桁数を聞く
+    digits = ask_digits(digits)
 
-    # keta.pyを使ってプレイヤーに桁数を聞く
-    new_digits = ask_digits(digits)
-    
-    # もし桁数が変更されたら、答え（secret）を作り直す
-    if new_digits != digits:
-        digits = new_digits
-        secret = make_secret(digits)
-        print(f"👉 {digits} 桁でゲームをスタートします！")
+    # プレイヤーに重複の有無を聞く
+    allow_duplicates = ask_duplicates()
+
+    # 選択されたルールで答えを作る
+    secret = make_secret(
+        digits,
+        allow_duplicates=allow_duplicates,
+    )
+
+    duplicate_text = "あり" if allow_duplicates else "なし"
+
+    print()
+    print(f"Hit & Blow（{digits}桁・重複{duplicate_text}）")
+    print("ゲームをスタートします！")
+
     tries = 0
+
     while True:
         guess = input("予想 > ").strip()
 
-        # ===== ② 入力コマンドに足す（ヒント など）: ここに書く（import もここに） =====
-        # 例:  from .hint import hint
-        #      if guess == "h":
-        #          print(hint(secret)); continue
+        # ===== ② 入力コマンドに足す（ヒントなど） =====
+        # 例：
+        # from .hint import hint
+        # if guess == "h":
+        #     print(hint(secret))
+        #     continue
 
+        # 数字と桁数を確認
         if len(guess) != digits or not guess.isdigit():
-            print(f"{digits} 桁の数字で入力してね")
+            print(f"{digits}桁の数字で入力してね")
             continue
+
+        # 重複なしルールの場合、同じ数字がないか確認
+        if not allow_duplicates and len(set(guess)) != digits:
+            print("重複なしルールです。同じ数字は使わないでね")
+            continue
+
         tries += 1
+
         hit, blow = judge(secret, guess)
+
         print(f"  Hit={hit}  Blow={blow}")
+
         if hit == digits:
+            # ===== ③ 勝利時に足す（スコア・履歴など） =====
 
-            # ===== ③ 勝利時に足す（スコア・履歴 など）: ここに書く =====
-
-            print(f"正解！ {tries} 回で当たり（答え {secret}）")
+            print(f"正解！ {tries}回で当たり（答え {secret}）")
             break
